@@ -8,19 +8,20 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
-
+# database concept
 class Todo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100))
     complete = db.Column(db.Boolean)
 
-
+# routing concept
 @app.route("/")
 def home():
     todo_list = Todo.query.all()
+    # template engine [Jinja] concept
     return render_template("base.html", todo_list=todo_list)
 
-
+# routing concept
 @app.route("/add", methods=["POST"])
 def add():
     title = request.form.get("title")
@@ -29,7 +30,7 @@ def add():
     db.session.commit()
     return redirect(url_for("home"))
 
-
+# routing
 @app.route("/update/<int:todo_id>")
 def update(todo_id):
     todo = Todo.query.filter_by(id=todo_id).first()
